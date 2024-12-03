@@ -25,6 +25,7 @@ import {
   logger,
   sessionRoom,
 } from "./util.js";
+import { initHealthChecks } from "./health/index.js";
 
 const CLEANUP_ZOMBIE_USERS_INTERVAL_IN_MS = 60_000;
 
@@ -51,6 +52,7 @@ export async function createApp(httpServer, config) {
 
   initAuth({ app, io, db, config });
   initEventHandlers({ io, db, config });
+  initHealthChecks({ app });
 
   const timerId = scheduleZombieUsersCleanup({ io, db });
 
@@ -125,7 +127,7 @@ function initEventHandlers({ io, db, config }) {
 
           io.to(userStateRoom(socket.userId)).emit(
             "user:disconnected",
-            socket.userId,
+            socket.userId
           );
         }
       }, config.disconnectionGraceDelay ?? 10_000);
