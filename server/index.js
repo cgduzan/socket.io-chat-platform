@@ -5,15 +5,16 @@ import { createApp, logger } from "./src/index.js";
 logger.add(
   new transports.Console({
     format: format.combine(format.colorize(), format.splat(), format.simple()),
-  }),
+  })
 );
 
 const httpServer = createServer();
 
 await createApp(httpServer, {
   postgres: {
+    host: process.env.POSTGRES_HOST || "localhost",
     user: "postgres",
-    password: "changeit",
+    password: process.env.POSTGRES_PASSWORD || "changeit",
   },
   sessionSecrets: ["changeit"],
   cors: {
