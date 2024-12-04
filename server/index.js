@@ -15,6 +15,13 @@ await createApp(httpServer, {
     host: process.env.POSTGRES_HOST || "localhost",
     user: "postgres",
     password: process.env.POSTGRES_PASSWORD || "changeit",
+    ssl: process.env.RDS_CERT_PATH
+      ? {
+          require: true,
+          rejectUnauthorized: true,
+          ca: fs.readFileSync(process.env.RDS_CERT_PATH).toString(),
+        }
+      : false,
   },
   sessionSecrets: ["changeit"],
   cors: {
