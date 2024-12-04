@@ -1,6 +1,7 @@
 import { format, transports } from "winston";
 import { createServer } from "node:http";
 import { createApp, logger } from "./src/index.js";
+import fs from "node:fs";
 
 logger.add(
   new transports.Console({
