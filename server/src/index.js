@@ -33,7 +33,9 @@ export async function createApp(httpServer, config) {
   const pgPool = new pg.Pool(config.postgres);
 
   logger.info("applying migration scripts...");
-  const migrations = await migrate({ client: pgPool }, "sql");
+
+  const migrationsDirPath = new URL("../sql", import.meta.url).pathname;
+  const migrations = await migrate({ client: pgPool }, migrationsDirPath);
   logger.info("%d migration scripts were applied", migrations.length);
 
   const app = createExpressApp();
